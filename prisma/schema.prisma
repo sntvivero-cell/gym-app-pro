@@ -7,7 +7,22 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id              Int      @id @default(autoincrement())
+  email           String   @unique @db.VarChar(255)
+  name            String   @db.VarChar(100)
+  sexo            Sexo
+  fechaNacimiento DateTime @db.Date
+  fotoPerfil      String?  @db.VarChar(255)
+}
+
+enum Sexo{
+  Hombre
+  Mujer
+}
+
+model Estadisticas{
+  id                  Int @id @default(autoincrement())
+  entrenosTotales     Int 
+  gruposMusculares    String
+  tiempoTotalEntreno  Int
 }
