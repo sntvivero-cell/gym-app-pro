@@ -13,6 +13,8 @@ model User {
   sexo            Sexo
   fechaNacimiento DateTime @db.Date
   fotoPerfil      String?  @db.VarChar(255)
+  estadisticas    Estadisticas?
+  rutina          Rutina[]
 }
 
 enum Sexo{
@@ -20,9 +22,40 @@ enum Sexo{
   Mujer
 }
 
-model Estadisticas{
-  id                  Int @id @default(autoincrement())
-  entrenosTotales     Int 
-  gruposMusculares    String
-  tiempoTotalEntreno  Int
+model Estadisticas {
+  id                 Int    @id @default(autoincrement())
+  entrenosTotales    Int    @default(0)
+  gruposMusculares   String
+  tiempoTotalEntreno Int    @default(0)
+  userId             Int    @unique 
+  user               User   @relation(fields: [userId], references: [id])
+}
+
+model Ejercicio {
+  id                Int     @id @default(autoincrement())
+  nombre            String  @unique
+  gruposMuscular    String
+  descripcion       String?
+  series            Serie[]
+}
+
+model Rutina{
+  id               Int      @id @default(autoincrement())
+  nombre           String  
+  creada_En        DateTime @default(now())
+  userId           Int      
+  user             User     @relation(fields:[userId], references:[id])
+  series           Serie[]
+}
+
+model Serie{
+  id              Int       @id @default(autoincrement())
+  repeticiones    Int
+  peso            Float
+
+  rutinaId        Int
+  rutina          Rutina    @relation(fields:[rutinaId], references:[id])
+
+  ejercicioId     Int
+  ejercicio       Ejercicio @relation(fields:[ejercicioId], references:[id])
 }
